@@ -11,6 +11,6 @@ It provides methods to set credentials, list directories, and test connections, 
 - Set FTP credentials with `FtpClient.SetCredentials`
 - List directories asynchronously with `FtpClient.GetDirectoriesAsync`
 - Test connection to an FTP server with `FtpClient.TestConnectionAsync`
-- Fully async, resource-safe with `using` blocks
+- Fully async
 
 ---
