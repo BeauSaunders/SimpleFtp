@@ -1,0 +1,9 @@
+﻿using SimpleFtp;
+
+await FtpClient.SetCredentials("ftp://147.135.139.33","anonymous","");
+
+var dirs = await FtpClient.GetDirectoriesAsync("");
+foreach (var dir in dirs)
+{ 
+    Console.WriteLine(dir);
+}
