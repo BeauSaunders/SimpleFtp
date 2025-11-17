@@ -108,6 +108,11 @@ namespace SimpleFtp
             return dirs;
         }
 
+        /// <summary>
+        /// Downloads the data from a file on the FTP server at the given path and returns the file's contents
+        /// </summary>
+        /// <param name="path">Path from root to query</param>
+        /// <returns>string (the file contents)</returns>
         public static async Task<string> GetFileContentsAsync(string path)
         {
             using FtpWebResponse ftpResponse = await GetResponseAsync(WebRequestMethods.Ftp.DownloadFile, path);
@@ -116,13 +121,17 @@ namespace SimpleFtp
             return await sReader.ReadToEndAsync();
         }
 
+        /// <summary>
+        /// Downloads the file on the ftp server at the given path and writes it to the local path
+        /// </summary>
+        /// <param name="localPath">The file to write to on the local machine (e.g. dir/subdir/file.txt)</param>
+        /// <param name="path">Path from root to query</param>
         public static async Task DownloadFileAsync(string localPath, string path)
         {
             await File.WriteAllTextAsync(localPath, await GetFileContentsAsync(path));
         }
 
 #endregion
-
 
     }
 }

@@ -5,3 +5,4 @@ obj/
 # User-specific files
 *.sln
 *.csproj
+*.DS_Store
