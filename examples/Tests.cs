@@ -7,3 +7,5 @@ foreach (var dir in dirs)
 { 
     Console.WriteLine(dir);
 }
+
+await FtpClient.DownloadFileAsync("examples/testFile.cpp", "@ace/mod.cpp");

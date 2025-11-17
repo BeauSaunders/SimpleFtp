@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 
 namespace SimpleFtp
@@ -8,6 +9,8 @@ namespace SimpleFtp
         static string uri = "ftp://127.0.0.1";
         static string user = "anonymous";
         static string pass = string.Empty;
+
+#region CORE
 
         /// <summary>
         /// Sets the passed paramters to memory (internal variables are static so only need to be set once)
@@ -49,28 +52,6 @@ namespace SimpleFtp
         }
 
         /// <summary>
-        /// Attempts to get a list of strings of all directories at the given path.
-        /// </summary>
-        /// <param name="path">[Default:""] Path from root to query</param>
-        /// <returns>List of strings of directory names.</returns>
-        public static async Task<List<string>> GetDirectoriesAsync(string path = "")
-        {
-            List<string> dirs = new();
-
-            using FtpWebResponse ftpResponse = await GetResponseAsync(WebRequestMethods.Ftp.ListDirectory, path);
-            using StreamReader sReader = new StreamReader(ftpResponse.GetResponseStream());
-
-            string? l = await sReader.ReadLineAsync(); // read 1st line
-            while (!string.IsNullOrEmpty(l)) // if there is a string at this line
-            {
-                dirs.Add(l); // add this string (name of folder) to the list
-                l = await sReader.ReadLineAsync(); // read the next line
-            }
-
-            return dirs;
-        }
-
-        /// <summary>
         /// Attempts a simple 'List Directory' call to test the connection.
         /// </summary>
         /// <param name="log">[Default:true] If true -> The method will log status updates to the Console</param>
@@ -101,6 +82,47 @@ namespace SimpleFtp
                 return false;
             }
         }
+
+#endregion
+#region  FUNCTIONS
+
+        /// <summary>
+        /// Attempts to get a list of strings of all directories at the given path.
+        /// </summary>
+        /// <param name="path">[Default:""] Path from root to query</param>
+        /// <returns>List of strings of directory names.</returns>
+        public static async Task<List<string>> GetDirectoriesAsync(string path = "")
+        {
+            List<string> dirs = new();
+
+            using FtpWebResponse ftpResponse = await GetResponseAsync(WebRequestMethods.Ftp.ListDirectory, path);
+            using StreamReader sReader = new StreamReader(ftpResponse.GetResponseStream());
+
+            string? l = await sReader.ReadLineAsync(); // read 1st line
+            while (!string.IsNullOrEmpty(l)) // if there is a string at this line
+            {
+                dirs.Add(l); // add this string (name of folder) to the list
+                l = await sReader.ReadLineAsync(); // read the next line
+            }
+
+            return dirs;
+        }
+
+        public static async Task<string> GetFileContentsAsync(string path)
+        {
+            using FtpWebResponse ftpResponse = await GetResponseAsync(WebRequestMethods.Ftp.DownloadFile, path);
+            using StreamReader sReader = new StreamReader(ftpResponse.GetResponseStream());
+
+            return await sReader.ReadToEndAsync();
+        }
+
+        public static async Task DownloadFileAsync(string localPath, string path)
+        {
+            await File.WriteAllTextAsync(localPath, await GetFileContentsAsync(path));
+        }
+
+#endregion
+
 
     }
 }
