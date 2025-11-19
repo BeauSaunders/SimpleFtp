@@ -35,7 +35,7 @@ namespace SimpleFtp
         /// Sends an FTP request using the specified method and returns the raw FtpWebResponse.
         /// </summary>
         /// <param name="method">The FTP method to execute. Must be a valid type, such as WebRequestMethods.Ftp.ListDirectory.</param>
-        /// <returns>The FtpWebResponse returned by the server.</returns>
+        /// <returns>[FtpWebResponse] Response returned by the server</returns>
         public static async Task<FtpWebResponse> GetResponseAsync(string method, string path = "", int timeout = 5000, int readWriteTimeout = 5000)
         {
             // still valid for ftp so suppress the warning
@@ -55,7 +55,7 @@ namespace SimpleFtp
         /// Attempts a simple 'List Directory' call to test the connection.
         /// </summary>
         /// <param name="log">[Default:true] If true -> The method will log status updates to the Console</param>
-        /// <returns>Bool: Whether the Connection Test was successful or not.</returns>
+        /// <returns>[Bool] Whether the Connection Test was successful or not</returns>
         public static async Task<bool> TestConnectionAsync(bool log = true)
         {
             try
@@ -90,7 +90,7 @@ namespace SimpleFtp
         /// Attempts to get a list of strings of all directories at the given path.
         /// </summary>
         /// <param name="path">[Default:""] Path from root to query</param>
-        /// <returns>List of strings of directory names.</returns>
+        /// <returns>[List<string>] List of directory names</returns>
         public static async Task<List<string>> GetDirectoriesAsync(string path = "")
         {
             List<string> dirs = new();
@@ -112,13 +112,24 @@ namespace SimpleFtp
         /// Downloads the data from a file on the FTP server at the given path and returns the file's contents
         /// </summary>
         /// <param name="path">Path from root to query</param>
-        /// <returns>string (the file contents)</returns>
+        /// <returns>[string] The file contents</returns>
         public static async Task<string> GetFileContentsAsync(string path)
         {
             using FtpWebResponse ftpResponse = await GetResponseAsync(WebRequestMethods.Ftp.DownloadFile, path);
             using StreamReader sReader = new StreamReader(ftpResponse.GetResponseStream());
 
             return await sReader.ReadToEndAsync();
+        }
+
+        /// <summary>
+        /// Gets the size of the file at the path in bytes
+        /// </summary>
+        /// <param name="path">Path from root to query</param>
+        /// <returns>[long] File size in bytes</returns>
+        public static async Task<long> GetFileSizeAsync(string path)
+        {
+            using FtpWebResponse ftpResponse = await GetResponseAsync(WebRequestMethods.Ftp.GetFileSize, path);
+            return ftpResponse.ContentLength;
         }
 
         /// <summary>
