@@ -9,3 +9,6 @@ foreach (var dir in dirs)
 }
 
 await FtpClient.DownloadFileAsync("examples/testFile.cpp", "@ace/mod.cpp");
+
+long size = await FtpClient.GetFileSizeAsync("@ace/mod.cpp");
+Console.WriteLine(size);
