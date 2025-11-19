@@ -14,6 +14,16 @@ Designed for quick integration into any project that needs reliable FTP operatio
 
 ---
 
+## Installation
+
+1. Download the SimpleFtp.DLL file and place it somewhere in your project's folder
+2. Open your project in Visual Studio (or your prefered editor)
+3. Right Click the 'Solution' in the Solution Explorer → Add → Project Referece → Browse
+4. Navigate to the SimpleFtp.dll file, select it and press 'Add'
+5. You can now use SimpleFtp by reference it with ```using SimpleFtp;```
+
+---
+
 ## API Overview
 
 Below is a clear breakdown of each public function, including purpose, parameters, return values, and examples.
